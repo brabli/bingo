@@ -39,6 +39,7 @@ class BingoBoard {
         ];
 
         this.bingoSquares = document.querySelectorAll('.bingo-square');
+        this.bingoCounterLabel = document.querySelector('.bingo-counter');
         this.bingoCounter = document.querySelector('.count');
         this.resetButton = document.querySelector('.reset-button');
         this.fullHouse = false;
@@ -86,9 +87,9 @@ class BingoBoard {
             this._resetAll();
         });
 
-        this.bingoCounter.addEventListener('click', () => {
-            this.bingoCounter.classList.toggle('fake');
-            if (this.bingoCounter.classList.contains('fake')) {
+        this.bingoCounterLabel.addEventListener('click', () => {
+            this.bingoCounterLabel.classList.toggle('fake');
+            if (this.bingoCounterLabel.classList.contains('fake')) {
                 this._populateSquareText(this.fakeSquareText);
             } else {
                 this._populateSquareText(this.squareText);
