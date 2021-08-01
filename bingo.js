@@ -41,7 +41,7 @@ class BingoBoard {
         this.bingoSquares = document.querySelectorAll('.bingo-square');
         this.bingoCounter = document.querySelector('.count');
         this.resetButton = document.querySelector('.reset-button');
-
+        this.fullHouse = false;
         this.totalBingos = 0;
 
         this.rows = [
@@ -73,6 +73,10 @@ class BingoBoard {
                 this._checkLinesForBingo(this.diags, "diag");
                 this.bingoCounter.textContent = this.totalBingos;
                 this._checkForFullHouse();
+                if (this.fullHouse) {
+                    const buzzer = new Audio('buzzer.mp3');
+                    buzzer.play();
+                }
             });
         });
 
