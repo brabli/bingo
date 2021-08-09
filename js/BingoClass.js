@@ -39,7 +39,7 @@ class BingoBoard {
         ]
 
         this.bingoSquares.forEach(ele => {
-            ele.addEventListener('click', () => {
+            ele.addEventListener('click', event => {
                 ele.classList.toggle('active');
 
                 this._checkForDeath();
@@ -50,10 +50,12 @@ class BingoBoard {
                 this._checkLinesForBingo(this.cols, "col");
                 this._checkLinesForBingo(this.diags, "diag");
                 this.bingoCounter.textContent = this.totalBingos;
-                this._checkForFullHouse();
-                if (this.fullHouse) {
-                    const buzzer = new Audio('assets/buzzer.mp3');
-                    buzzer.play();
+                if (!event.target.classList.contains('bad-square')) {
+                    this._checkForFullHouse();
+                    if (this.fullHouse) {
+                        const buzzer = new Audio('assets/buzzer.mp3');
+                        buzzer.play();
+                    }
                 }
             });
         });
@@ -131,7 +133,8 @@ class BingoBoard {
     }
 
     _checkForFullHouse() {
-        const bingoSquares = Array.from(this.bingoSquares);
+        const allBingoSquares = Array.from(this.bingoSquares);
+        const bingoSquares = allBingoSquares.filter(square => !square.classList.contains('bad-square'));
         const allActive = bingoSquares.every(square => square.classList.contains('active'));
         if (allActive) {
             this.fullHouse = true;
