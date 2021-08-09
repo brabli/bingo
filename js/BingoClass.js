@@ -1,15 +1,18 @@
 class BingoBoard {
-    constructor(squares) {
+    constructor(bingoSquareContents = [], badSquareContents = [], fakeBingoContents = []) {
 
-        if (squares.length !== 16) {
+        if (bingoSquareContents.length !== 16) {
             throw new Error("Squares array must contain 16 items!");
         }
 
-        this.squareText = squares;
+        this.squareText = bingoSquareContents;
+        this.badText = badSquareContents;
+        this.fakeSquareText = fakeBingoContents;
 
-        this.fakeSquareText = [];
-
+        this.bingoContainer = document.querySelector('.bingo-container');
         this.bingoSquares = document.querySelectorAll('.bingo-square');
+        this.badSquares = document.querySelectorAll('.bad-square');
+        this.badSquaresContainer = document.querySelector('.bad-squares-container');
         this.bingoCounterLabel = document.querySelector('.bingo-counter');
         this.bingoCounter = document.querySelector('.count');
         this.resetButton = document.querySelector('.reset-button');
@@ -38,6 +41,8 @@ class BingoBoard {
         this.bingoSquares.forEach(ele => {
             ele.addEventListener('click', () => {
                 ele.classList.toggle('active');
+
+                this._checkForDeath();
                 // Reset totalBingos as it's recalculated inside next method calls.
                 this.totalBingos = 0;
                 // Bingo counter is increased inside these method calls.
@@ -53,26 +58,61 @@ class BingoBoard {
             });
         });
 
-        this._populateSquareText(this.squareText);
+        this._populateSquareText(this.squareText, this.badText);
 
         this.resetButton.addEventListener('click', () => {
             this._resetAll();
         });
 
-        this.bingoCounterLabel.addEventListener('click', () => {
-            this.bingoCounterLabel.classList.toggle('fake');
-            if (this.bingoCounterLabel.classList.contains('fake')) {
-                this._populateSquareText(this.fakeSquareText);
-            } else {
-                this._populateSquareText(this.squareText);
-            }
-        })
+        // Toggles between fake and real bingos using GET parameter
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const real = urlParams.get('real');
+
+        if (real !== 'true') {
+            this._toggleFakeBingo();
+        } else {
+            this.badSquaresContainer.classList.toggle('hidden');
+            this.bingoCounterLabel.addEventListener('click', () => {
+                this._toggleFakeBingo();
+            })
+        }
     }
 
-    _populateSquareText(textList) {
+    _toggleFakeBingo() {
+        this.bingoCounterLabel.classList.toggle('fake');
+        if (this.bingoCounterLabel.classList.contains('fake')) {
+            this._populateSquareText(this.fakeSquareText);
+            this.badSquaresContainer.classList.add('hidden');
+            document.querySelector('body').classList.remove('red');
+            this.bingoContainer.classList.remove('red');
+        } else {
+            this._populateSquareText(this.squareText, this.badText);
+            this.badSquaresContainer.classList.remove('hidden');
+            this._checkForDeath();
+        }
+    }
+
+    _checkForDeath() {
+        const line = Array.from(this.badSquares);
+        const isDead = line.every(square => square.classList.contains('active'));
+        if (isDead) {
+            document.querySelector('body').classList.add('red');
+            this.bingoContainer.classList.add('red');
+        } else {
+            document.querySelector('body').classList.remove('red');
+            this.bingoContainer.classList.remove('red');
+
+        }
+    }
+
+    _populateSquareText(textList, badList = []) {
         this.bingoSquares.forEach((ele, i) => {
             ele.textContent = textList[i];
-        })
+        });
+        this.badSquares.forEach((ele, i) => {
+            ele.textContent = badList[i];
+        });
     }
 
     _checkLinesForBingo(lines, name) {
@@ -106,6 +146,8 @@ class BingoBoard {
         bingoSquares.forEach(square => square.classList.remove('row-bingo'));
         bingoSquares.forEach(square => square.classList.remove('col-bingo'));
         bingoSquares.forEach(square => square.classList.remove('diag-bingo'));
+        document.querySelector('body').classList.remove('red');
+        this.bingoContainer.classList.remove('red');
         this.totalBingos = 0;
         this.bingoCounter.textContent = 0;
     }
