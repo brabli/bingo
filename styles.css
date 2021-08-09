@@ -121,3 +121,11 @@ body {
 .bad-square.active {
     background-color: rgb(144, 31, 31);
 }
+
+.red {
+    background-color: rgb(74, 12, 12);
+}
+
+.hidden {
+    display: none;
+}
