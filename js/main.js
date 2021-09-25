@@ -1,4 +1,4 @@
-import BingoBoard from "./BingoClass.js";
+import BingoBoard from "./BingoBoard.js";
 
 new BingoBoard(
     [

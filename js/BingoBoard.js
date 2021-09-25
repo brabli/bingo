@@ -69,7 +69,8 @@ class BingoBoard {
         // Toggles between fake and real bingos using GET parameter
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
-        const real = urlParams.get('real');
+        // const real = urlParams.get('real');
+        const real = true;
 
         if (real !== 'true') {
             this._toggleFakeBingo();
