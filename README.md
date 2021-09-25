@@ -2,6 +2,10 @@
 
 Bingo in the gaff
 
-## TODOs
+## Commands
 
-1. Local storage restore.
+Develop mode:
+`make dev`
+
+Build dist:
+`make build`
