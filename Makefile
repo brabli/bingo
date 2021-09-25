@@ -4,4 +4,4 @@ dev:
 
 .PHONY: build
 build:
-	@make build
+	@npm run build
