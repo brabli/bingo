@@ -70,7 +70,7 @@ class BingoBoard {
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         // const real = urlParams.get('real');
-        const real = true;
+        const real = 'true';
 
         if (real !== 'true') {
             this._toggleFakeBingo();
