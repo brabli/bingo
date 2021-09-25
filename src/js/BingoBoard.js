@@ -53,7 +53,8 @@ class BingoBoard {
                 if (!event.target.classList.contains('bad-square')) {
                     this._checkForFullHouse();
                     if (this.fullHouse) {
-                        const buzzer = new Audio('assets/buzzer.mp3');
+                        const audioUrl = require('../assets/audio/buzzer.mp3');
+                        const buzzer = new Audio(audioUrl);
                         buzzer.play();
                     }
                 }
