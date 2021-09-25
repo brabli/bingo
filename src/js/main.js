@@ -1,3 +1,4 @@
+import '../css/main.scss';
 import BingoBoard from "./BingoBoard.js";
 
 new BingoBoard(

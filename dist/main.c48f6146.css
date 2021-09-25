@@ -1,0 +1,131 @@
+@import url("https://fonts.googleapis.com/css2?family=Bangers&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Miss+Fajardose&display=swap");
+/* font-family: 'Miss Fajardose', cursive; */
+html, body, * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+}
+
+body {
+  background-color: #393939;
+}
+
+.bingo-container {
+  background-color: #1c361a;
+  border: 2px solid black;
+  border-radius: 5px;
+  box-shadow: 3px 3px 15px 0px #000000;
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
+  margin: 0.2rem auto;
+  padding: 0.2rem;
+  width: 98%;
+}
+
+.bingo-square {
+  align-items: center;
+  background: url(/cobweb.dc033b1c.png);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  /* background-size: cover; */
+  background-color: #9a9a9a;
+  border: 1px solid #434343;
+  display: flex;
+  flex: 0 1 25%;
+  text-shadow: 2px 2px 2px 2px black;
+  font-size: 0.7rem;
+  font-weight: bold;
+  height: 16vh;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0.2rem;
+}
+
+.header-container {
+  align-items: center;
+  color: #f2f2f2;
+  display: flex;
+  font-family: "Miss Fajardose", cursive;
+  justify-content: space-between;
+  padding: 0.4rem 0;
+  text-shadow: 0 0 3px #000000, 0 0 5px #000000;
+}
+
+.title {
+  font-family: inherit;
+  font-size: 2.2rem;
+  width: 60%;
+}
+
+.bingo-counter, .count {
+  font-family: inherit;
+  font-size: 1.5rem;
+  width: 20%;
+}
+
+.button-container {
+  width: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.reset-button {
+  background-color: #303030;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2.5rem;
+  width: 2.5rem;
+  font-size: 0.5rem;
+  border-radius: 100%;
+  box-shadow: 1px 1px 8px -2px #000000;
+  border: 1px solid #545454;
+}
+
+.reset-button:active {
+  background-color: #0f0f0f;
+}
+
+.active {
+  border: none;
+  background-color: #2e3e2e;
+  box-shadow: inset 1px 1px 6px -2px #000000;
+  color: #FFF;
+  padding: calc(0.2rem + 1px);
+  text-shadow: 2px 3px 3px rgba(0, 0, 0, 0.7);
+}
+
+.col-bingo, .diag-bingo, .row-bingo {
+  background: none;
+  background-color: #604f10;
+}
+
+.bad-squares-container {
+  padding: 0.6rem;
+  background-color: #342222;
+  margin: 1rem;
+  display: flex;
+  justify-content: space-around;
+  border: 3px solid #1b0808;
+  border-radius: 6px;
+  box-shadow: 3px 3px 15px 0px #000000;
+}
+
+.bad-square.active {
+  background-color: #901f1f;
+}
+
+.red {
+  background-color: #4a0c0c;
+}
+
+.hidden {
+  display: none;
+}
+
+/*# sourceMappingURL=/main.c48f6146.css.map */
