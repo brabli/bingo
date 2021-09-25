@@ -5,6 +5,8 @@ class BingoBoard {
             throw new Error("Squares array must contain 16 items!");
         }
 
+        this.storage = window.localStorage;
+
         this.squareText = bingoSquareContents;
         this.badText = badSquareContents;
         this.fakeSquareText = fakeBingoContents;
@@ -41,7 +43,7 @@ class BingoBoard {
         this.bingoSquares.forEach(ele => {
             ele.addEventListener('click', event => {
                 ele.classList.toggle('active');
-
+                this._updateStorage();
                 this._checkForDeath();
                 // Reset totalBingos as it's recalculated inside next method calls.
                 this.totalBingos = 0;
@@ -81,6 +83,32 @@ class BingoBoard {
                 this._toggleFakeBingo();
             })
         }
+
+        this._restore();
+    }
+
+    _restore() {
+        if (this.storage.getItem('squares')) {
+            const squareStates = JSON.parse(this.storage.getItem('squares'));
+            this.bingoSquares.forEach((square, i) => {
+                if (squareStates[i]) {
+                    square.classList.add('active');
+                }
+            });
+        }
+        this._checkForDeath();
+        this._checkLinesForBingo(this.rows, 'row');
+        this._checkLinesForBingo(this.cols, 'col');
+        this._checkLinesForBingo(this.diags, 'diag');
+        this._checkForFullHouse();
+    }
+
+    _updateStorage() {
+        const storageArray = [];
+        this.bingoSquares.forEach(square => {
+            storageArray.push(square.classList.contains('active'));
+        });
+        this.storage.setItem('squares', JSON.stringify(storageArray));
     }
 
     _toggleFakeBingo() {
@@ -147,6 +175,7 @@ class BingoBoard {
 
     _resetAll() {
         const bingoSquares = Array.from(this.bingoSquares);
+        this.storage.clear();
         bingoSquares.forEach(square => square.classList.remove('active'));
         bingoSquares.forEach(square => square.classList.remove('row-bingo'));
         bingoSquares.forEach(square => square.classList.remove('col-bingo'));
