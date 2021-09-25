@@ -3,26 +3,26 @@ import BingoBoard from "./BingoBoard.js";
 
 new BingoBoard(
     [
-        'Joanne asks for a top up',
-        'Kat mentions Saffie',
-        'Bri says something uncomfortable about Katy',
-        'Nate revealing too much info',
-        'Bri copying Alex',
-        'Tamworth Station',
-        'Dead Fish',
-        'Hargreves talks about decorating his house',
-        'Hargreves mentions Yorkshire Water',
-        'Bri refers to Jandrews by his full name',
-        'Jack is corrected by Alex on details of an event',
-        'Jandrews puts on a record and nobody knows what it is',
-        'Nate needs something universally simple explained',
-        'Jamie says something clearly BS',
-        'Bri asks Alex a question that is meant to be overheard by everyone',
-        'Someone suggests we play Among Us'
+        'A male relative complains about parking',
+        'Somebody mentions that there are a lot of people here',
+        'Nate does something innapropriate for a wedding',
+        'Awkward audience laughter',
+        'Somebody asks Alex how her day is',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
     ],
 
     [
-        'test',
+        'Somebody discovers we are playing Bingo again',
         'test2',
         'test3'
     ],
@@ -34,7 +34,6 @@ new BingoBoard(
         '',
         '',
         '',
-        'Test',
         '',
         '',
         '',
@@ -43,6 +42,7 @@ new BingoBoard(
         '',
         '',
         '',
-        ''
+        '',
+        '',
     ]
 );
