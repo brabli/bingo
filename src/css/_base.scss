@@ -9,5 +9,7 @@ html, body, * {
 
 body {
     background-color: $grey-400;
+    margin: 0 auto;
+    max-width: 50rem;
     &.red { background-color: $dark-red; }
 }
