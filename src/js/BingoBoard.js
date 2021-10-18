@@ -8,16 +8,18 @@ class BingoBoard {
         this.storage = window.localStorage;
 
         this.squareText = bingoSquareContents;
-        this.badText = badSquareContents;
         this.fakeSquareText = fakeBingoContents;
+        this.badSquareText = badSquareContents;
 
         this.bingoContainer = document.querySelector('.bingo-container');
         this.bingoSquares = document.querySelectorAll('.bingo-square');
+        this.goodSquares = document.querySelectorAll('.bingo-square:not(.bad-square)');
         this.badSquares = document.querySelectorAll('.bad-square');
         this.badSquaresContainer = document.querySelector('.bad-squares-container');
         this.bingoCounterLabel = document.querySelector('.bingo-counter');
         this.bingoCounter = document.querySelector('.count');
         this.resetButton = document.querySelector('.reset-button');
+        this.editButton = document.querySelector('.edit-button');
         this.fullHouse = false;
         this.totalBingos = 0;
 
@@ -42,6 +44,7 @@ class BingoBoard {
 
         this.bingoSquares.forEach(ele => {
             ele.addEventListener('click', event => {
+                if (ele.classList.contains('being-edited')) return;
                 ele.classList.toggle('active');
                 this._updateStorage();
                 this._checkForDeath();
@@ -63,39 +66,39 @@ class BingoBoard {
             });
         });
 
-        this._populateSquareText(this.squareText, this.badText);
+        this._populateSquareText(this.squareText, this.badSquareText);
 
         this.resetButton.addEventListener('click', () => {
             this._resetAll();
         });
 
-        // Toggles between fake and real bingos using GET parameter
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        // const real = urlParams.get('real');
-        const real = 'true';
-
-        if (real !== 'true') {
+        this.bingoCounterLabel.addEventListener('click', () => {
             this._toggleFakeBingo();
-        } else {
-            this.badSquaresContainer.classList.toggle('hidden');
-            this.bingoCounterLabel.addEventListener('click', () => {
-                this._toggleFakeBingo();
-            })
-        }
+        });
+
+        this.editButton.addEventListener('click', () => {
+            this._toggleEditMode();
+        })
 
         this._restore();
     }
 
     _restore() {
-        if (this.storage.getItem('squares')) {
-            const squareStates = JSON.parse(this.storage.getItem('squares'));
+        if (this.storage.getItem('activeSquares')) {
+            const squareStates = JSON.parse(this.storage.getItem('activeSquares'));
             this.bingoSquares.forEach((square, i) => {
                 if (squareStates[i]) {
                     square.classList.add('active');
                 }
             });
         }
+        if (this.storage.getItem('goodTextContent') && this.storage.getItem('badTextContent')) {
+            this._populateSquareText(
+                JSON.parse(this.storage.getItem('goodTextContent')),
+                JSON.parse(this.storage.getItem('badTextContent'))
+            );
+        }
+
         this._checkForDeath();
         this._checkLinesForBingo(this.rows, 'row');
         this._checkLinesForBingo(this.cols, 'col');
@@ -103,12 +106,44 @@ class BingoBoard {
         this._checkForFullHouse();
     }
 
+    _toggleEditMode() {
+        if (this.bingoContainer.editable === 'true') {
+            this.editButton.classList.remove('active');
+            this.bingoContainer.editable = 'false';
+            this.bingoSquares.forEach(square => {
+                square.contentEditable = 'false';
+                square.classList.remove('being-edited');
+            });
+            this._updateStorage();
+        } else {
+            this.editButton.classList.add('active');
+            this.bingoContainer.editable = 'true';
+            this.bingoSquares.forEach(square => {
+                square.contentEditable = 'true';
+                square.classList.add('being-edited');
+            });
+        }
+    }
+
     _updateStorage() {
-        const storageArray = [];
+        const activeSquaresStorage = [];
+        const goodSquareTextStorage = [];
+        const badSquareTextStorage = [];
+
         this.bingoSquares.forEach(square => {
-            storageArray.push(square.classList.contains('active'));
+            activeSquaresStorage.push(square.classList.contains('active'));
         });
-        this.storage.setItem('squares', JSON.stringify(storageArray));
+        this.storage.setItem('activeSquares', JSON.stringify(activeSquaresStorage));
+
+        this.goodSquares.forEach(square => {
+            goodSquareTextStorage.push(square.textContent);
+        });
+        this.storage.setItem('goodTextContent', JSON.stringify(goodSquareTextStorage));
+
+        this.badSquares.forEach(square => {
+            badSquareTextStorage.push(square.textContent);
+        });
+        this.storage.setItem('badTextContent', JSON.stringify(badSquareTextStorage));
     }
 
     _toggleFakeBingo() {
@@ -119,7 +154,7 @@ class BingoBoard {
             document.querySelector('body').classList.remove('red');
             this.bingoContainer.classList.remove('red');
         } else {
-            this._populateSquareText(this.squareText, this.badText);
+            this._populateSquareText(this.squareText, this.badSquareText);
             this.badSquaresContainer.classList.remove('hidden');
             this._checkForDeath();
         }
@@ -134,7 +169,6 @@ class BingoBoard {
         } else {
             document.querySelector('body').classList.remove('red');
             this.bingoContainer.classList.remove('red');
-
         }
     }
 
@@ -174,7 +208,7 @@ class BingoBoard {
     }
 
     _resetAll() {
-        const bingoSquares = Array.from(this.bingoSquares);
+        const bingoSquares = this.bingoSquares;
         this.storage.clear();
         bingoSquares.forEach(square => square.classList.remove('active'));
         bingoSquares.forEach(square => square.classList.remove('row-bingo'));
@@ -184,6 +218,7 @@ class BingoBoard {
         this.bingoContainer.classList.remove('red');
         this.totalBingos = 0;
         this.bingoCounter.textContent = 0;
+        this._populateSquareText(this.squareText, this.badSquareText);
     }
 }
 
