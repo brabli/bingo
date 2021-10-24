@@ -15,7 +15,7 @@ new BingoBoard(
         'Nate fucking dies',
         'A photographer turns into a contortionist',
         'Somebody trips over',
-        'Molly asks Abby to change her profile pic',
+        'Molly flirts with someone OR asks Abby to change her profile pic',
         'Jandrews spills something on himself',
         'Nicole complains about something',
         'A fight breaks out'
