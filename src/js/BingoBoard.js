@@ -44,25 +44,7 @@ class BingoBoard {
 
         this.bingoSquares.forEach(ele => {
             ele.addEventListener('click', event => {
-                if (ele.classList.contains('being-edited')) return;
-                ele.classList.toggle('active');
-                this._updateStorage();
-                this._checkForDeath();
-                // Reset totalBingos as it's recalculated inside next method calls.
-                this.totalBingos = 0;
-                // Bingo counter is increased inside these method calls.
-                this._checkLinesForBingo(this.rows, "row");
-                this._checkLinesForBingo(this.cols, "col");
-                this._checkLinesForBingo(this.diags, "diag");
-                this.bingoCounter.textContent = this.totalBingos;
-                if (!event.target.classList.contains('bad-square')) {
-                    this._checkForFullHouse();
-                    if (this.fullHouse) {
-                        const audioUrl = require('../assets/audio/buzzer.mp3');
-                        const buzzer = new Audio(audioUrl);
-                        buzzer.play();
-                    }
-                }
+                this._bingoSquareListener(ele, event);
             });
         });
 
@@ -81,6 +63,30 @@ class BingoBoard {
         })
 
         this._restore();
+    }
+
+    _bingoSquareListener(ele, event) {
+        // Early return for edit mode. This should be a data attribute 2bh.
+        if (ele.classList.contains('being-edited')) return;
+        ele.classList.toggle('active');
+        this._updateStorage();
+        this._checkForDeath();
+        // Reset totalBingos as it's recalculated inside next method calls.
+        this.totalBingos = 0;
+        // Bingo counter is increased inside these method calls.
+        this._checkLinesForBingo(this.rows, "row");
+        this._checkLinesForBingo(this.cols, "col");
+        this._checkLinesForBingo(this.diags, "diag");
+        this.bingoCounter.textContent = this.totalBingos;
+        // If this square is'nt a bad square check for full house. Just have seperate listeners?
+        if (!event.target.classList.contains('bad-square')) {
+            this._checkForFullHouse();
+            if (this.fullHouse) {
+                const audioUrl = require('../assets/audio/buzzer.mp3');
+                const buzzer = new Audio(audioUrl);
+                buzzer.play();
+            }
+        }
     }
 
     _restore() {
